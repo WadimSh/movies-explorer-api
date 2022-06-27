@@ -6,7 +6,6 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
-    required: [true, 'Не указан адрес электронной почты'],
     validate: {
       validator(email) {
         return validator.isEmail(email);
@@ -21,9 +20,9 @@ const userSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    required: [true, 'Не указано имя'],
-    minlength: [2, 'Минимальная длина имени 2-а символа'],
-    maxlength: [30, 'Максимальная длина имени 30-ть символов'],
+    required: true,
+    minlength: 2,
+    maxlength: 30,
   },
 });
 

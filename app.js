@@ -7,7 +7,7 @@ const { errors } = require('celebrate');
 const helmet = require('helmet');
 const cors = require('cors');
 
-const rateLimiter = require('./middlewares/rateLimit');
+const { rateLimiter } = require('./middlewares/rateLimit');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const router = require('./routes/index');
 
