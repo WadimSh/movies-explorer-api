@@ -48,6 +48,44 @@ const createUser = (req, res, next) => {
     });
 };
 
+const findAuthorizationUser = (req, res, next) => {
+  const id = req.user._id;
+  User.findById(id)
+    .then((user) => {
+      if (!user) {
+        next(new NotFound('Пользователь по указанному _id не найден.'));
+        return;
+      }
+      res.send(user);
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new InvalidRequest('Невалидный id.'));
+        return;
+      }
+      next(err);
+    });
+};
+
+const updateUser = (req, res, next) => {
+  const { name, email } = req.body;
+  User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
+    .then((user) => {
+      if (!user) {
+        next(new NotFound('Пользователь по указанному _id не найден.'));
+        return;
+      }
+      res.send(user);
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new InvalidRequest('Переданы некорректные данные при создании карточки.'));
+        return;
+      }
+      next(err);
+    });
+};
+
 module.exports = {
-  login, createUser,
+  login, createUser, findAuthorizationUser, updateUser,
 };
