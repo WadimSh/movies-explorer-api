@@ -9,8 +9,8 @@ const getMovies = (req, res, next) => {
   const owner = req.user._id;
 
   Movie.find({ owner })
-    .then((cards) => {
-      res.status(200).send(cards);
+    .then((movies) => {
+      res.status(200).send(movies);
     })
     .catch((err) => {
       throw new NotFound(err.message);
@@ -23,7 +23,7 @@ const createMovie = (req, res, next) => {
 
   Movie.create({ owner, ...req.body })
     .then((movie) => {
-      res.status(201).send({ data: movie });
+      res.status(201).send(movie);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -49,7 +49,7 @@ const deleteMovie = (req, res, next) => {
       } else {
         Movie.findByIdAndDelete(movieId)
           .then((deletedMovie) => {
-            res.status(200).send({ data: deletedMovie });
+            res.status(200).send(deletedMovie);
           })
           .catch(next);
       }
