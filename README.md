@@ -46,7 +46,7 @@ nameEN | Название фильма на английском языке. О�
 ----- |------|---------
 GET | `/users/me` | возвращает **email** и **имя**
 PATCH | `/users/me` | обновляет информацию о пользователе 
-POST | `/movies` | создаёт фильм с передаными **country**, **director**, **duration**, **year**, **description**, **image*, **trailer**, **nameRU**, **nameEN**, **movieId** и **thumbnail**
+POST | `/movies` | создаёт фильм с передаными **country**, **director**, **duration**, **year**, **description**, **image**, **trailer**, **nameRU**, **nameEN**, **movieId** и **thumbnail**
 GET | `/movies` | возвращает все сохранённые пользователем фильмы
 DELETE | `/movies/_id` | удаляет сохранённый фильм по его **id**
 POST | `/signup` | создает пользователя с передаными **email**, **password**, **name**
@@ -65,7 +65,7 @@ POST | `/signin` | проверяет переданные **email** и **passwo
 * bcryptjs
 * express-rate-limit
 * winston
-* express-winston
+* express-winston*
 * helmet
 * jsonwebtoken
 * validator
