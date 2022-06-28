@@ -10,7 +10,7 @@ const getMovies = (req, res, next) => {
 
   Movie.find({ owner })
     .then((movies) => {
-      res.status(200).send(movies);
+      res.send(movies);
     })
     .catch((err) => {
       throw new NotFound(err.message);
@@ -23,7 +23,7 @@ const createMovie = (req, res, next) => {
 
   Movie.create({ owner, ...req.body })
     .then((movie) => {
-      res.status(201).send(movie);
+      res.send(movie);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -36,7 +36,7 @@ const createMovie = (req, res, next) => {
 };
 
 const deleteMovie = (req, res, next) => {
-  const owner = req.user.movieId;
+  const owner = req.user._id;
   const { movieId } = req.params;
 
   Movie.findById(movieId)
@@ -45,11 +45,11 @@ const deleteMovie = (req, res, next) => {
         throw new NotFound('Запрашиваемый ресурс не найден');
       }
       if (movie.owner.toString() !== owner) {
-        throw new ProhibitedAction('Нет доступа к удалению фильма');
+        throw new ProhibitedAction('Нет доступа к удалению фильма.');
       } else {
         Movie.findByIdAndDelete(movieId)
           .then((deletedMovie) => {
-            res.status(200).send(deletedMovie);
+            res.send(deletedMovie);
           })
           .catch(next);
       }
