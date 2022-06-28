@@ -9,6 +9,6 @@ const {
 
 movieRouter.get('/', getMovies);
 movieRouter.post('/', postMovieValidator, createMovie);
-movieRouter.delete('/:_id', deleteMovieValidator, deleteMovie);
+movieRouter.delete('/:movieId', deleteMovieValidator, deleteMovie);
 
 module.exports = movieRouter;
