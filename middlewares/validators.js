@@ -10,7 +10,7 @@ const signInValidator = celebrate({
 
 const signUpValidator = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
@@ -18,7 +18,7 @@ const signUpValidator = celebrate({
 
 const patchMeValidator = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
     email: Joi.string().required().email(),
   }),
 });
@@ -36,7 +36,7 @@ const postMovieValidator = celebrate({
       }
       return helpers.message('Некорректная ссылка на постер к фильму.');
     }),
-    trailer: Joi.string().required().custom((value, helpers) => {
+    trailerLink: Joi.string().required().custom((value, helpers) => {
       if (isURL(value)) {
         return value;
       }
