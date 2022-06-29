@@ -9,6 +9,7 @@ const cors = require('cors');
 
 const rateLimiter = require('./middlewares/rateLimit');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const errorHandler = require('./middlewares/errorHandler');
 const router = require('./routes/index');
 
 const { PORT = 3001, MONGO_URL = 'mongodb://localhost:27017/moviesdb' } = process.env;
@@ -23,27 +24,20 @@ mongoose.connect(MONGO_URL, {
 
 app.use(cors());
 
-app.use(express.json());
-
 app.use(requestLogger);
-
-app.use(helmet());
 
 app.use(rateLimiter);
 
-app.use('/', router);
+app.use(helmet());
+
+app.use(express.json());
+
+app.use(router);
 
 app.use(errorLogger);
 
 app.use(errors());
 
-app.use((err, _, res, next) => {
-  if (err.statusCode) {
-    res.status(err.statusCode).send({ message: err.message });
-    return;
-  }
-  res.status(500).send({ message: 'Ошибка по умолчанию.' });
-  next();
-});
+app.use(errorHandler);
 
 app.listen(PORT);

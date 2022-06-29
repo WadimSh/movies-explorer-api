@@ -40,13 +40,13 @@ const createUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new InvalidRequest('Переданы некорректные данные.'));
-        return;
       }
       if (err.code === 11000) {
         next(new Conflict('Пользователь с указаным Email уже существует.'));
-        return;
+      } else {
+        next(err);
       }
-      next(err);
+      
     });
 };
 
@@ -55,15 +55,15 @@ const findAuthorizationUser = (req, res, next) => {
   User.findById(id)
     .then((user) => {
       if (!user) {
-        next(new NotFound('Пользователь по указанному _id не найден.'));
+        next(new NotFound('Пользователь не найден.'));
         return;
       }
       res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new InvalidRequest('Невалидный id.'));
-        return;
+        next(new InvalidRequest('Нет такого пользователя.'));
+        
       }
       next(err);
     });
@@ -81,11 +81,13 @@ const updateUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new InvalidRequest('Переданы некорректные данные при создании карточки.'));
-        return;
+        throw new InvalidRequest('Переданы некорректные данные.');
+      } else if (err.name === 'MongoServerError') {
+        throw new Conflict('Указанные данные уже используются.');
+      } else {
+        next(err);
       }
-      next(err);
-    });
+    })
 };
 
 module.exports = {
