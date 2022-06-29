@@ -1,7 +1,7 @@
 {
   "name": "movies-explorer-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Сервер для дипломного проекта Movies-explorer",
   "main": "index.js",
   "scripts": {
     "start": "node app.js",
@@ -13,7 +13,7 @@
     "url": "git+https://github.com/WadimSh/movies-explorer-api.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vadim Shiringa",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/WadimSh/movies-explorer-api/issues"

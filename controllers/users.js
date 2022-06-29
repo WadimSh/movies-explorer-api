@@ -46,7 +46,6 @@ const createUser = (req, res, next) => {
       } else {
         next(err);
       }
-      
     });
 };
 
@@ -63,7 +62,6 @@ const findAuthorizationUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new InvalidRequest('Нет такого пользователя.'));
-        
       }
       next(err);
     });
@@ -72,22 +70,19 @@ const findAuthorizationUser = (req, res, next) => {
 const updateUser = (req, res, next) => {
   const { name, email } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
+    .orFail(new NotFound('Пользователь с таким _id не найден'))
     .then((user) => {
-      if (!user) {
-        next(new NotFound('Пользователь по указанному _id не найден.'));
-        return;
-      }
       res.send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        throw new InvalidRequest('Переданы некорректные данные.');
-      } else if (err.name === 'MongoServerError') {
-        throw new Conflict('Указанные данные уже используются.');
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        next(new InvalidRequest('Переданы некорректные данные.'));
+      } else if (err.code === 11000) {
+        next(new Conflict('Указанные данные уже используются.'));
       } else {
         next(err);
       }
-    })
+    });
 };
 
 module.exports = {
